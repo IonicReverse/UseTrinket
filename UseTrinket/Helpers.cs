@@ -1,5 +1,4 @@
 ﻿using robotManager.Helpful;
-using wManager.Wow.Enums;
 using wManager.Wow.Helpers;
 
 namespace UseTrinket
@@ -8,14 +7,14 @@ namespace UseTrinket
   {
     public static void Log(string message)
     {
-      Logging.Write("[UseTrinket] " + message, Logging.LogType.Normal, System.Drawing.Color.AliceBlue);
+      Logging.Write("[UseTrinket] " + message, Logging.LogType.Normal, System.Drawing.Color.Green);
     }
 
-    public static int GetInventoryCooldown(WoWInventorySlot slotId)
+    public static int GetInventoryCooldown(int slotId)
     {
       return Lua.LuaDoString<int>(
         @"
-          local start, duration, enable = GetInventoryItemCooldown(""player"", " + (int)slotId + @")
+          local start, duration, enable = GetInventoryItemCooldown(""player"", " + slotId + @")
           local coolDown = duration-(GetTime()-start);
           if (coolDown < 0) then 
               return 0;
@@ -26,10 +25,10 @@ namespace UseTrinket
 
     public static void UseTrinket()
     {
-      if (UseTrinketSettings.CurrentSettings.Trinket1 && GetInventoryCooldown(WoWInventorySlot.Trinket1) == 0)
+      if (UseTrinketSettings.CurrentSettings.Trinket1 && GetInventoryCooldown(13) <= 0)
         Lua.RunMacroText("/use 13");
 
-      if (UseTrinketSettings.CurrentSettings.Trinket2 && GetInventoryCooldown(WoWInventorySlot.Trinket2) == 0)
+      if (UseTrinketSettings.CurrentSettings.Trinket2 && GetInventoryCooldown(14) <= 0)
         Lua.RunMacroText("/use 14");
     }
   }
